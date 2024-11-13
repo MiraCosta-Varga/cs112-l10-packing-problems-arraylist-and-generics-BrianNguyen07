@@ -1,47 +1,48 @@
-public class Inventory {
+import java.util.List;
 
-	/*     STEP 3 
-	*        
-	*      Create this bounded type generic class with everything you 
-	*      would expect in a class (instance variable, constructor,
-	*      get/set methods) and then make two additional generic methods:
-	*
-	*      Go to Transfer.java for STEP 4
-	*/
+public class Inventory<T extends Supplies> {
 
-	/*     STEP 5
-	*
-	*      Create a method called searchByName() that takes two parameters:
-	*          - The input List<T> of generic type T
-	*          - A String "name" that we will use to search in the input List
-	*
-	*      This method should iterate through all the objects in our List
-	*      and use the getName() method of Supplies to compare against the
-	*      input String "name", use the indexOf() method to return the 
-	*      index. If no match is found, return -1. 
-	*/
+    private List<T> items;
 
+    // Constructor
+    public Inventory(List<T> items) {
+        this.items = items;
+    }
 
-	/*     STEP 7:
-	* 
-	*      Create a method called checkQty() that takes three parameters:
-	*           - The input List<T>
-	*           - The String name of the object we want to check
-	*           - The int desiredQuantity that we want to check/change for 
-	*             the item
-	*           
-	*      Use our method searchByName() to be able to get the index of 
-	*      the object we are looking for and use the index to access the 
-	*      object within the List<T>. If the object is not found, or if
-	*      our searchByName() method returns -1, return null.
-	*
-	*      Once our object is found, check the quantity via the .get() 
-	*      method from the List class and by using the .getQuantity()
-	*      from the Supplies class. Compare the value with the parameter 
-	*      desiredQuantity, if they match then return the object as-is
-	*      and notify user that the quantity matches. If it does not 
-	*      match the quantity in the list, then update using .setQuantity
-	*      and return the object with the new quantity.
-	*/
+    // Getter and Setter for items
+    public List<T> getItems() {
+        return items;
+    }
 
+    public void setItems(List<T> items) {
+        this.items = items;
+    }
+
+    // Method to search by name and return index or -1 if not found
+    public int searchByName(List<T> inputList, String name) {
+        for (int i = 0; i < inputList.size(); i++) {
+            if (inputList.get(i).getName().equalsIgnoreCase(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // Method to check quantity and update if needed
+    public T checkQty(List<T> inputList, String name, int desiredQuantity) {
+        int index = searchByName(inputList, name);
+        if (index == -1) {
+            return null; // Item not found
+        }
+
+        T item = inputList.get(index);
+        if (item.getQuantity() == desiredQuantity) {
+            System.out.println("The quantity matches the desired quantity.");
+            return item;
+        } else {
+            item.setQuantity(desiredQuantity);
+            System.out.println("The quantity has been updated to the desired quantity.");
+            return item;
+        }
+    }
 }
